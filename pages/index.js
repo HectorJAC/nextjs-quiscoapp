@@ -1,5 +1,9 @@
+import Layout from "../layout/Layout";
+
 export default function Home() {
   return (
-    <h1>Hola</h1>
+    <Layout>
+      <h1>Inicio</h1>
+    </Layout>
   )
 }
