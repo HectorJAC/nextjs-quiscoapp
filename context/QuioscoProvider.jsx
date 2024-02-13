@@ -1,17 +1,44 @@
 import { useState, useEffect, createContext } from 'react';
+import axios from 'axios';
 
-const QuiscoContext = createContext();
+const QuioscoContext = createContext();
 
-const QuiscoProvider = ({ children }) => {
+const QuioscoProvider = ({ children }) => {
+
+    const [categorias, setCategorias] = useState([]);
+    const [categoriaActual, setCategoriaActual] = useState({});
+
+    const obtenerCategorias = async () => {
+        const {data} = await axios.get('/api/categorias');
+        setCategorias(data);
+    };
+
+    useEffect(() => {
+        obtenerCategorias();
+    }, []);
+
+    useEffect(() => {
+        setCategoriaActual(categorias[0]);
+    }, [categorias]);
+
+    const handleClickCategoria = (id) => {
+        const categoria = categorias.filter(cat => cat.id === id);
+        setCategoriaActual(categoria[0]);
+    };
+
     return (
-        <QuiscoContext.Provider value={{}}>
+        <QuioscoContext.Provider value={{
+            categorias,
+            categoriaActual,
+            handleClickCategoria
+        }}>
             {children}
-        </QuiscoContext.Provider>
+        </QuioscoContext.Provider>
     );
 };
 
 export {
-    QuiscoProvider
+    QuioscoProvider
 };
 
-export default QuiscoContext;
+export default QuioscoContext;
