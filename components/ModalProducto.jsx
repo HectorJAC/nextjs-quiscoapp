@@ -1,10 +1,22 @@
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import useQuiosco from "../hooks/useQuiosco";
 import { formatearDinero } from "../helpers";
 
 const ModalProducto = () => {
     
-    const { producto, handleChangeModal } = useQuiosco();
+    const { producto, handleChangeModal, handleAgregarPedido, pedido } = useQuiosco();
+    const [cantidad, setCantidad] = useState(1);
+    const [edicion, setEdicion] = useState(false);
+
+    useEffect(() => {
+        // Comprobar si el Modal Actual esta en el pedido
+        if (pedido.some((pedidoState) => pedidoState.id === producto.id)) {
+            const productoEdicion = pedido.find((pedidoState) => pedidoState.id === producto.id);
+            setEdicion(true);
+            setCantidad(productoEdicion.cantidad);
+        }
+    }, [producto, pedido]);
 
     return (
         <div
@@ -47,6 +59,66 @@ const ModalProducto = () => {
                 <p className="mt-5 font-black text-5xl text-amber-500">
                     {formatearDinero(producto.precio)}
                 </p>
+
+                <div className="flex gap-4 mt-5">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            if (cantidad <= 1) return
+                            setCantidad(cantidad - 1)
+                        }}
+                    >
+                        <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            strokeWidth={1.5} 
+                            stroke="currentColor" 
+                            className="w-7 h-7"
+                        >
+                            <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
+                            />
+                        </svg>
+                    </button>
+
+                    <p className="text-3xl">
+                        {cantidad}
+                    </p>
+
+                    <button
+                        type="button"
+                        onClick={() => {
+                            if (cantidad >= 5) return
+                            setCantidad(cantidad + 1)
+                        }}
+                    >
+                        <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            strokeWidth={1.5} 
+                            stroke="currentColor" 
+                            className="w-7 h-7"
+                        >
+                            <path 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round" 
+                                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
+                            />
+                        </svg>
+                    </button>
+                </div>
+                    
+                <button
+                    type="button"
+                    className="bg-amber-600 hover:bg-amber-800 text-white font-bold py-2 px-5 mt-5 rounded-md uppercase"
+                    onClick={() => handleAgregarPedido({...producto, cantidad})}
+                >
+                    {edicion ? 'Guardar Cambios' : 'Agregar al Pedido'}
+                </button>
             </div>
         </div>
     )
