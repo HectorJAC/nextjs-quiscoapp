@@ -45,10 +45,10 @@ const QuioscoProvider = ({ children }) => {
                 productoState.id === producto.id ? producto : productoState
             ));
             setPedido(pedidoActualizado);
-            toast.success('Guardado Correctamente');
+            toast.success('Pedido Guardado Correctamente');
         } else {
             setPedido([...pedido, producto]);
-            toast.success('Agregado al Pedido');
+            toast.success('Pedido Agregado al Pedido');
         };
 
         setModal(false);
