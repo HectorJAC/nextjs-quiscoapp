@@ -12,6 +12,8 @@ const QuioscoProvider = ({ children }) => {
     const [producto, setProducto] = useState({});
     const [modal, setModal] = useState(false);
     const [pedido, setPedido] = useState([]);
+    const [nombre, setNombre] = useState('');
+    const [total, setTotal] = useState('');
 
     const router = useRouter();
 
@@ -77,12 +79,14 @@ const QuioscoProvider = ({ children }) => {
             producto,
             modal,
             pedido,
+            nombre,
             handleClickCategoria,
             handleSetProducto,
             handleChangeModal,
             handleAgregarPedido,
             handleEditarCantidades,
-            handleEliminarProducto
+            handleEliminarProducto,
+            setNombre
         }}>
             {children}
         </QuioscoContext.Provider>
