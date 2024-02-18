@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext } from 'react';
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -11,7 +12,8 @@ const QuioscoProvider = ({ children }) => {
     const [producto, setProducto] = useState({});
     const [modal, setModal] = useState(false);
     const [pedido, setPedido] = useState([]);
-    const [paso, setPaso] = useState(1);
+
+    const router = useRouter();
 
     const obtenerCategorias = async () => {
         const {data} = await axios.get('/api/categorias');
@@ -29,6 +31,7 @@ const QuioscoProvider = ({ children }) => {
     const handleClickCategoria = (id) => {
         const categoria = categorias.filter(cat => cat.id === id);
         setCategoriaActual(categoria[0]);
+        router.push('/'); // Redirecciona a la página principal
     };
 
     const handleSetProducto = (producto) => {
@@ -39,7 +42,7 @@ const QuioscoProvider = ({ children }) => {
         setModal(!modal);
     };
 
-    const handleAgregarPedido = ({categoriaId, imagen, ...producto}) => { // Elimina las propiedades que no se necesitan
+    const handleAgregarPedido = ({categoriaId, ...producto}) => { // Elimina las propiedades que no se necesitan
         if (pedido.some(productoState => productoState.id === producto.id)) {
             // Actualizar la cantidad
             const pedidoActualizado = pedido.map((productoState) => (
@@ -55,6 +58,18 @@ const QuioscoProvider = ({ children }) => {
         setModal(false);
     };
 
+    const handleEditarCantidades = (id) => {
+        const productoActualizar = pedido.filter((producto) => producto.id === id);
+        setProducto(productoActualizar[0]);
+        setModal(!modal);
+    };
+
+    const handleEliminarProducto = (id) => {
+        const pedidoActualizado = pedido.filter((producto) => producto.id !== id);
+        setPedido(pedidoActualizado);
+        toast.success('Producto Eliminado del Pedido Correctamente');
+    };
+
     return (
         <QuioscoContext.Provider value={{
             categorias,
@@ -66,6 +81,8 @@ const QuioscoProvider = ({ children }) => {
             handleSetProducto,
             handleChangeModal,
             handleAgregarPedido,
+            handleEditarCantidades,
+            handleEliminarProducto
         }}>
             {children}
         </QuioscoContext.Provider>
