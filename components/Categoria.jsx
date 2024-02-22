@@ -4,7 +4,7 @@ import useQuiosco from "../hooks/useQuiosco";
 const Categoria = ({categoria}) => {
 
     const { nombre, icono, id } = categoria;
-    const {  categoriaActual, handleClickCategoria } = useQuiosco();
+    const { categoriaActual, handleClickCategoria } = useQuiosco();
 
     return (
         <div className={`

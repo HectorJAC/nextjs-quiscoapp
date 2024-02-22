@@ -1,6 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// For migrating your schema, run "npx prisma migrate dev" in your terminal
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -32,4 +34,5 @@ model Orden {
   fecha     DateTime
   total     Float
   pedido    Json
+  estado    Boolean @default(false)
 }

@@ -5,7 +5,7 @@ import useQuiosco from "../hooks/useQuiosco";
 const Producto = ({producto}) => {
 
     const { handleSetProducto, handleChangeModal } = useQuiosco();
-    const {nombre, imagen, precio} = producto;
+    const { nombre, imagen, precio } = producto;
 
     return (
         <div className="border p-3">
